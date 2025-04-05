@@ -12,6 +12,15 @@ router = APIRouter()
 
 @router.post("/stories/", response_model=UserStoryResponse)
 def create_story(story: UserStoryCreate, db: Session = Depends(get_db)):
+    """Create a new user story.
+
+    Args:
+        story (UserStoryCreate): The user story to create.
+        db (Session): Database session.
+
+    Returns:
+        UserStoryResponse: The created story.
+    """
     db_story = UserStory(**story.model_dump())
     db.add(db_story)
     db.commit()
@@ -23,6 +32,16 @@ def create_story(story: UserStoryCreate, db: Session = Depends(get_db)):
 def read_stories(
     skip: int = 0, limit: int = 10, db: Session = Depends(get_db)
 ):
+    """List at  most 10 user stories.
+
+    Args:
+        skip (int): The number of stories to skip.
+        limit (int): The maximum number of stories to list.
+        db (Session): Database session.
+
+    Returns:
+        db: Database session containing list of user stories.
+    """
     return db.query(UserStory).offset(skip).limit(limit).all()
 
 
